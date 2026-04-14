@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOTR Facts Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h1 class="h3 mb-3">Lord of the Rings Facts Quiz</h1>
+            <p class="text-muted">Answer the questions and get feedback.</p>
+
+            <form id="lotrQuiz">
+              <div class="mb-4">
+                <label class="form-label fw-semibold">1) Who carried the One Ring?</label>
+                <div class="btn-group w-100" role="group" aria-label="One Ring carrier">
+                  <input type="radio" class="btn-check" name="ring" id="ring-frodo" value="Frodo" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="ring-frodo">Frodo</label>
+
+                  <input type="radio" class="btn-check" name="ring" id="ring-sam" value="Sam" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="ring-sam">Sam</label>
+
+                  <input type="radio" class="btn-check" name="ring" id="ring-gandalf" value="Gandalf" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="ring-gandalf">Gandalf</label>
+                </div>
+                <div class="form-text" id="q1Feedback"></div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-semibold">2) Which of these are members of the Fellowship? (Check all that apply)</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fellowship-aragorn" value="Aragorn">
+                  <label class="form-check-label" for="fellowship-aragorn">Aragorn</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fellowship-legolas" value="Legolas">
+                  <label class="form-check-label" for="fellowship-legolas">Legolas</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fellowship-sauron" value="Sauron">
+                  <label class="form-check-label" for="fellowship-sauron">Sauron</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fellowship-gimli" value="Gimli">
+                  <label class="form-check-label" for="fellowship-gimli">Gimli</label>
+                </div>
+                <div class="form-text" id="q2Feedback"></div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-semibold">3) What creature guarded the entrance to Moria?</label>
+                <div class="btn-group" role="group" aria-label="Moria creature">
+                  <button type="button" class="btn btn-success answer-btn" data-answer="Balrog">Balrog</button>
+                  <button type="button" class="btn btn-success answer-btn" data-answer="Dragon">Dragon</button>
+                  <button type="button" class="btn btn-success answer-btn" data-answer="Troll">Troll</button>
+                </div>
+                <div class="form-text" id="q3Feedback"></div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-semibold">4) What do you know about LOTR?</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="know-books">
+                  <label class="form-check-label" for="know-books">I've read the books</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="know-movies">
+                  <label class="form-check-label" for="know-movies">I've watched the movies</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="know-lore">
+                  <label class="form-check-label" for="know-lore">I know the lore</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="know-lore">
+                  <label class="form-check-label" for="know-lore">N/A</label>
+                </div>
+                <div class="form-text" id="q4Feedback"></div>
+              </div>
+
+              <div class="d-flex gap-2 mb-3">
+                <button type="submit" class="btn btn-primary">Submit Quiz</button>
+                <button type="reset" class="btn btn-outline-secondary">Reset</button>
+              </div>
+            </form>
+
+            <div id="scoreBox" class="alert d-none" role="alert"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('lotrQuiz');
+    const scoreBox = document.getElementById('scoreBox');
+    const q1Feedback = document.getElementById('q1Feedback');
+    const q2Feedback = document.getElementById('q2Feedback');
+    const q3Feedback = document.getElementById('q3Feedback');
+    const q4Feedback = document.getElementById('q4Feedback');
+
+    const answerButtons = document.querySelectorAll('.answer-btn');
+    let q3Selected = null;
+
+    answerButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        q3Selected = btn.dataset.answer;
+        answerButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let score = 0;
+
+      const ring = document.querySelector('input[name="ring"]:checked');
+      if (ring && ring.value === 'Frodo') {
+        score++;
+        q1Feedback.textContent = 'Correct: Frodo carried the One Ring.';
+        q1Feedback.className = 'form-text text-success';
+      } else {
+        q1Feedback.textContent = 'Incorrect: Frodo is the correct answer.';
+        q1Feedback.className = 'form-text text-danger';
+      }
+
+      const selected = Array.from(document.querySelectorAll('#fellowship-aragorn, #fellowship-legolas, #fellowship-sauron, #fellowship-gimli'))
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+      const correctSet = ['Aragorn', 'Legolas', 'Gimli'];
+      const isCorrectSet = selected.length === correctSet.length && correctSet.every(name => selected.includes(name));
+      if (isCorrectSet) {
+        score++;
+        q2Feedback.textContent = 'Correct: Aragorn, Legolas, and Gimli are Fellowship members.';
+        q2Feedback.className = 'form-text text-success';
+      } else {
+        q2Feedback.textContent = 'Incorrect: The correct choices are Aragorn, Legolas, and Gimli.';
+        q2Feedback.className = 'form-text text-danger';
+      }
+
+      if (q3Selected === 'Balrog') {
+        score++;
+        q3Feedback.textContent = 'Correct: The Balrog guarded Moria.';
+        q3Feedback.className = 'form-text text-success';
+      } else {
+        q3Feedback.textContent = 'Incorrect: The Balrog is the correct answer.';
+        q3Feedback.className = 'form-text text-danger';
+      }
+
+      const books = document.getElementById('know-books').checked;
+      const movies = document.getElementById('know-movies').checked;
+      const lore = document.getElementById('know-lore').checked;
+      if (books || movies || lore) {
+        score++;
+        q4Feedback.textContent = 'Nice! You have some LOTR experience.';
+        q4Feedback.className = 'form-text text-success';
+      } else {
+        q4Feedback.textContent = 'Pick at least one option.';
+        q4Feedback.className = 'form-text text-danger';
+      }
+
+      scoreBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+      scoreBox.classList.add(score >= 3 ? 'alert-success' : 'alert-danger');
+      scoreBox.textContent = `You scored ${score} out of 4.`;
+    });
+
+    form.addEventListener('reset', () => {
+      q1Feedback.textContent = '';
+      q2Feedback.textContent = '';
+      q3Feedback.textContent = '';
+      q4Feedback.textContent = '';
+      scoreBox.classList.add('d-none');
+      answerButtons.forEach(b => b.classList.remove('active'));
+      q3Selected = null;
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
